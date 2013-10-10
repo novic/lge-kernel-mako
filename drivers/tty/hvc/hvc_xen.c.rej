@@ -1,0 +1,14 @@
+--- drivers/tty/hvc/hvc_xen.c
++++ drivers/tty/hvc/hvc_xen.c
+@@ -433,9 +436,9 @@
+ 	if (devid == 0)
+ 		return -ENODEV;
+ 
+-	info = kzalloc(sizeof(struct xencons_info), GFP_KERNEL | __GFP_ZERO);
++	info = kzalloc(sizeof(struct xencons_info), GFP_KERNEL);
+ 	if (!info)
+-		goto error_nomem;
++		return -ENOMEM;
+ 	dev_set_drvdata(&dev->dev, info);
+ 	info->xbdev = dev;
+ 	info->vtermno = xenbus_devid_to_vtermno(devid);

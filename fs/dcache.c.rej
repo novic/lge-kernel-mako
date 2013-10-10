@@ -1,0 +1,29 @@
+--- fs/dcache.c
++++ fs/dcache.c
+@@ -1116,6 +1116,8 @@
+ 	return 1;
+ 
+ rename_retry:
++	if (locked)
++		goto again;
+ 	locked = 1;
+ 	write_seqlock(&rename_lock);
+ 	goto again;
+@@ -1218,6 +1220,8 @@
+ rename_retry:
+ 	if (found)
+ 		return found;
++	if (locked)
++		goto again;
+ 	locked = 1;
+ 	write_seqlock(&rename_lock);
+ 	goto again;
+@@ -2965,6 +2971,8 @@
+ 	return;
+ 
+ rename_retry:
++	if (locked)
++		goto again;
+ 	locked = 1;
+ 	write_seqlock(&rename_lock);
+ 	goto again;

@@ -1,0 +1,10 @@
+--- include/linux/usb.h
++++ include/linux/usb.h
+@@ -1400,6 +1421,7 @@
+ extern void usb_kill_urb(struct urb *urb);
+ extern void usb_poison_urb(struct urb *urb);
+ extern void usb_unpoison_urb(struct urb *urb);
++extern void usb_block_urb(struct urb *urb);
+ extern void usb_kill_anchored_urbs(struct usb_anchor *anchor);
+ extern void usb_poison_anchored_urbs(struct usb_anchor *anchor);
+ extern void usb_unpoison_anchored_urbs(struct usb_anchor *anchor);

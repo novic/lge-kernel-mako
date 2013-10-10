@@ -1,0 +1,18 @@
+--- net/wireless/reg.c
++++ net/wireless/reg.c
+@@ -393,7 +398,15 @@
+ 
+ 	schedule_work(&reg_regdb_work);
+ }
++
++/* Feel free to add any other sanity checks here */
++static void reg_regdb_size_check(void)
++{
++	/* We should ideally BUILD_BUG_ON() but then random builds would fail */
++	WARN_ONCE(!reg_regdb_size, "db.txt is empty, you should update it...");
++}
+ #else
++static inline void reg_regdb_size_check(void) {}
+ static inline void reg_regdb_query(const char *alpha2) {}
+ #endif /* CONFIG_CFG80211_INTERNAL_REGDB */
+ 

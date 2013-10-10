@@ -1,0 +1,15 @@
+--- drivers/iommu/intel-iommu.c
++++ drivers/iommu/intel-iommu.c
+@@ -2293,12 +2300,6 @@
+ 	if (!info)
+ 		return -ENOMEM;
+ 
+-	ret = domain_context_mapping(domain, pdev, translation);
+-	if (ret) {
+-		free_devinfo_mem(info);
+-		return ret;
+-	}
+-
+ 	info->segment = pci_domain_nr(pdev->bus);
+ 	info->bus = pdev->bus->number;
+ 	info->devfn = pdev->devfn;

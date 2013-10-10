@@ -1,0 +1,11 @@
+--- fs/buffer.c
++++ fs/buffer.c
+@@ -1051,7 +1053,7 @@
+ 	}
+ 
+ 	for (;;) {
+-		struct buffer_head * bh;
++		struct buffer_head *bh;
+ 		int ret;
+ 
+ 		bh = __find_get_block(bdev, block, size);
