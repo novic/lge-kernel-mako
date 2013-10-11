@@ -1,0 +1,13 @@
+--- arch/arm/configs/mako_defconfig
++++ arch/arm/configs/mako_defconfig
+@@ -684,7 +684,9 @@
+ CONFIG_ZBOOT_ROM_BSS=0
+ CONFIG_CMDLINE=""
+ # CONFIG_XIP_KERNEL is not set
+-# CONFIG_KEXEC is not set
++CONFIG_KEXEC=y
++CONFIG_KEXEC_HARDBOOT=y
++CONFIG_ATAGS_PROC=y
+ # CONFIG_CRASH_DUMP is not set
+ # CONFIG_AUTO_ZRELADDR is not set
+ 
