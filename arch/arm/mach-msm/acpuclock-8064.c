@@ -271,3 +271,4 @@ static int __init acpuclk_8064_init(void)
 	return platform_driver_probe(&acpuclk_8064_driver,
 				     acpuclk_8064_probe);
 }
+device_initcall(acpuclk_8064_init);
