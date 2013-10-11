@@ -658,12 +658,22 @@ static inline int hrtimer_enqueue_reprogram(struct hrtimer *timer,
 static void retrigger_next_event(void *arg)
 {
 	struct hrtimer_cpu_base *base = &__get_cpu_var(hrtimer_bases);
+	struct timespec realtime_offset, xtim, wtm, sleep;
 
 	if (!hrtimer_hres_active())
-		return;
+	return;
 
+	/* Optimized out for !HIGH_RES */
+	get_xtime_and_monotonic_and_sleep_offset(&xtim, &wtm, &sleep);
+	set_normalized_timespec(&realtime_offset, -wtm.tv_sec, -wtm.tv_nsec);
+
+	/* Adjust CLOCK_REALTIME offset */
 	raw_spin_lock(&base->lock);
-	hrtimer_update_base(base);
+	base->clock_base[HRTIMER_BASE_REALTIME].offset =
+	timespec_to_ktime(realtime_offset);
+	base->clock_base[HRTIMER_BASE_BOOTTIME].offset =
+	timespec_to_ktime(sleep);
+
 	hrtimer_force_reprogram(base, 0);
 	raw_spin_unlock(&base->lock);
 }
