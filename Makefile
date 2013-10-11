@@ -378,7 +378,7 @@ KERNEL_MODS	= $(CFLAGS_A15) $(CFLAGS_MODULO)
 
 KBUILD_CFLAGS   := -Wall -Wno-unused-variable -Wundef -Wstrict-prototypes -Wno-trigraphs \
 		   -fno-strict-aliasing -fno-common \
-		   -Wno-format-security \
+		   -Wno-format-security -Wno-implicit-function-declaration \
 		   -fno-delete-null-pointer-checks \
 			-mno-unaligned-access \
 			-Wno-sizeof-pointer-memaccess \
