@@ -419,3 +419,4 @@ struct mgmt_ev_le_conn_params {
 	__u16 latency;
 	__u16 timeout;
 } __packed;
+

@@ -1114,3 +1114,4 @@ void hci_le_ltk_neg_reply(struct hci_conn *conn);
 void hci_read_rssi(struct hci_conn *conn);
 
 #endif /* __HCI_CORE_H */
+
