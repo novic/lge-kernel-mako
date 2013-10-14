@@ -39,7 +39,6 @@
  * PERFORMANCE OF THIS SOFTWARE.
  */
 
-
 #ifndef WLAN_QCT_TLI_H
 #define WLAN_QCT_TLI_H
 
@@ -53,6 +52,8 @@ DESCRIPTION
   This file contains the internal declarations used within wlan transport
   layer module.
 
+  Copyright (c) 2008 QUALCOMM Incorporated. All Rights Reserved.
+  Qualcomm Confidential and Proprietary
 ===========================================================================*/
 
 
@@ -110,6 +111,7 @@ when        who    what, where, why
 
 
 #define STATIC  static
+
 /*----------------------------------------------------------------------------
  * Preprocessor Definitions and Constants
  * -------------------------------------------------------------------------*/
@@ -247,8 +249,6 @@ when        who    what, where, why
 /*get RSSI1 from a RX BD*/
 #define WLANTL_GETRSSI1(pBD)    (WDA_GETRSSI1(pBD) - WLAN_TL_RSSI_CORRECTION)
 
-#define WLANTL_GETSNR(pBD)      WDA_GET_RX_SNR(pBD)
-
 /* Check whether Rx frame is LS or EAPOL packet (other than data) */
 #define WLANTL_BAP_IS_NON_DATA_PKT_TYPE(usType) \
   ((WLANTL_BT_AMP_TYPE_AR == usType) || (WLANTL_BT_AMP_TYPE_SEC == usType) || \
@@ -277,9 +277,6 @@ typedef enum
 
   /* Serialzie Finish UL Authentication request */
   WLANTL_FINISH_ULA   = 5,
-
-  /* Serialized Snapshot request indication */
-  WLANTL_TX_SNAPSHOT = 6,
 
   WLANTL_TX_MAX
 }WLANTL_TxSignalsType;
@@ -455,8 +452,6 @@ typedef struct
   WLANTL_TIMER_EXPIER_UDATA_T timerUdata;
 
   WLANTL_REORDER_BUFFER_T     *reorderBuffer;
-
-  v_U16_t            LastSN;
 }WLANTL_BAReorderType;
 
 
@@ -518,18 +513,6 @@ typedef struct
 
   /* Value of the averaged RSSI for this station */
   v_U32_t                       uLinkQualityAvg;
-
-  /* Sum of SNR for snrIdx number of consecutive frames */
-  v_U32_t                       snrSum;
-
-  /* Number of consecutive frames over which snrSum is calculated */
-  v_S7_t                        snrIdx;
-
-  /* Average SNR of previous 20 frames */
-  v_S7_t                        prevSnrAvg;
-
-  /* Average SNR returned by fw */
-  v_S7_t                        snrAvgBmps;
 
   /* Tx packet count per station per TID */
   v_U32_t                       auTxCount[WLAN_MAX_TID];
@@ -653,8 +636,6 @@ typedef struct
     1 then we have to encrypt the data irrespective of TL
     state (CONNECTED/AUTHENTICATED) */
   v_U8_t ptkInstalled;
-
-  v_U32_t       linkCapacity;
 }WLANTL_STAClientType;
 
 /*---------------------------------------------------------------------------
@@ -1302,7 +1283,7 @@ WLANTL_Translate8023To80211Header
   VOS_STATUS*     pvosStatus,
   WLANTL_CbType*  pTLCb,
   v_U8_t          *pucStaId,
-  WLANTL_MetaInfoType* pTlMetaInfo,
+  v_U8_t          ucUP,
   v_U8_t          *ucWDSEnabled,
   v_U8_t          *extraHeadSpace
 );
@@ -1635,23 +1616,6 @@ VOS_STATUS WLANTL_ReadRSSI
    v_U8_t           STAid
 );
 
-/*==========================================================================
-
-   FUNCTION
-
-   DESCRIPTION   Read SNR value out of a RX BD
-
-   PARAMETERS: Caller must validate all parameters
-
-   RETURN VALUE
-
-============================================================================*/
-VOS_STATUS WLANTL_ReadSNR
-(
-   v_PVOID_t        pAdapter,
-   v_PVOID_t        pBDHeader,
-   v_U8_t           STAid
-);
 
 
 void WLANTL_PowerStateChangedCB

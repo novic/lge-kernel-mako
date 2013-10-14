@@ -46,7 +46,14 @@
 #include <sirParams.h>  // needed for tSirMbMsg
 #include "wlan_qct_wda.h"
 
-#ifndef FEATURE_WLAN_PAL_MEM_DISABLE
+
+// its not worth the time trying to get all the includes in place to get to
+// halMmhForwardMBmsg.  if I inlude halMnt.h, I get all kids of compile errros
+// for things missing from palPipes.h (asicDxe.h is looking for these).  palPipes
+// is used only in Gen4 DVT code so why we would have it or need it is puzzling.
+//#include <halMnt.h>
+
+
 
 #ifdef MEMORY_DEBUG
 eHalStatus palAllocateMemory_debug( tHddHandle hHdd, void **ppMemory, tANI_U32 numBytes, char* fileName, tANI_U32 lineNum )
@@ -107,7 +114,7 @@ tANI_BOOLEAN palEqualMemory( tHddHandle hHdd, void *pMemory1, void *pMemory2, tA
 {
    return( vos_mem_compare( pMemory1, pMemory2, numBytes ) );
 }   
-#endif
+
 
 eHalStatus palPktAlloc(tHddHandle hHdd, eFrameType frmType, tANI_U16 size, void **data, void **ppPacket)
 {
@@ -326,7 +333,7 @@ eHalStatus palSendMBMessage(tHddHandle hHdd, void *pBuf)
       }
    }
 
-   vos_mem_free( pBuf );
+   palFreeMemory( hHdd, pBuf );
 
    return( halStatus );
 }

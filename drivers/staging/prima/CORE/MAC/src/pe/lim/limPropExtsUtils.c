@@ -99,21 +99,19 @@ limExtractApCapability(tpAniSirGlobal pMac, tANI_U8 *pIE, tANI_U16 ieLen,
 #if !defined WLAN_FEATURE_VOWIFI
     tANI_U32            localPowerConstraints = 0;
 #endif
-    
-    pBeaconStruct = vos_mem_malloc(sizeof(tSirProbeRespBeacon));
-
-    if ( NULL == pBeaconStruct )
+    if(eHAL_STATUS_SUCCESS != palAllocateMemory(pMac->hHdd, 
+                                                (void **)&pBeaconStruct, sizeof(tSirProbeRespBeacon)))
     {
-        limLog(pMac, LOGE, FL("Unable to allocate memory in limExtractApCapability") );
+        limLog(pMac, LOGE, FL("Unable to PAL allocate memory in limExtractApCapability\n") );
         return;
     }
 
-    vos_mem_set( (tANI_U8 *) pBeaconStruct, sizeof(tSirProbeRespBeacon), 0);
+    palZeroMemory( pMac->hHdd, (tANI_U8 *) pBeaconStruct, sizeof(tSirProbeRespBeacon));
     *qosCap = 0;
     *propCap = 0;
     *uapsd = 0;
     PELOG3(limLog( pMac, LOG3,
-        FL("In limExtractApCapability: The IE's being received are:"));
+        FL("In limExtractApCapability: The IE's being received are:\n"));
     sirDumpBuf( pMac, SIR_LIM_MODULE_ID, LOG3, pIE, ieLen );)
     if (sirParseBeaconIE(pMac, pBeaconStruct, pIE, (tANI_U32)ieLen) == eSIR_SUCCESS)
     {
@@ -131,9 +129,9 @@ limExtractApCapability(tpAniSirGlobal pMac, tANI_U8 *pIE, tANI_U16 ieLen,
 
 #ifdef WLAN_FEATURE_11AC
         VOS_TRACE(VOS_MODULE_ID_PE, VOS_TRACE_LEVEL_INFO_MED,
-            "***beacon.VHTCaps.present*****=%d",pBeaconStruct->VHTCaps.present);
+            "***beacon.VHTCaps.present*****=%d\n",pBeaconStruct->VHTCaps.present);
         VOS_TRACE(VOS_MODULE_ID_PE, VOS_TRACE_LEVEL_INFO_MED,
-           "***beacon.SU Beamformer Capable*****=%d",pBeaconStruct->VHTCaps.suBeamFormerCap);
+           "***beacon.SU Beamformer Capable*****=%d\n",pBeaconStruct->VHTCaps.suBeamFormerCap);
 
         if ( pBeaconStruct->VHTCaps.present && pBeaconStruct->VHTOperation.present)
         {
@@ -178,11 +176,11 @@ limExtractApCapability(tpAniSirGlobal pMac, tANI_U8 *pIE, tANI_U16 ieLen,
 #if !defined WLAN_FEATURE_VOWIFI
         if (cfgSetInt(pMac, WNI_CFG_LOCAL_POWER_CONSTRAINT, localPowerConstraints) != eSIR_SUCCESS)
         {
-            limLog(pMac, LOGP, FL("Could not update local power constraint to cfg."));
+            limLog(pMac, LOGP, FL("Could not update local power constraint to cfg.\n"));
         }
 #endif
     }
-    vos_mem_free(pBeaconStruct);
+    palFreeMemory(pMac->hHdd, pBeaconStruct);
     return;
 } /****** end limExtractApCapability() ******/
 
