@@ -1434,3 +1434,4 @@ int hci_set_auth_info(struct hci_dev *hdev, void __user *arg)
 
 	return copy_to_user(arg, &req, sizeof(req)) ? -EFAULT : 0;
 }
+
