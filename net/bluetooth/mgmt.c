@@ -3418,3 +3418,4 @@ int mgmt_remote_features(u16 index, bdaddr_t *bdaddr, u8 features[8])
 	return mgmt_event(MGMT_EV_REMOTE_FEATURES, index, &ev, sizeof(ev),
 									NULL);
 }
+
